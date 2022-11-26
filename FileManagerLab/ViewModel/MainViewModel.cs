@@ -21,7 +21,10 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public ApplicationDirectory leftHierarchySelectedItem;
-    public ICommand GoDownCommand { get; set; } 
+    
+    [ObservableProperty]
+    public BaseTab currentTab;
+    public ICommand SelectFolderItemCommand { get; set; } 
     public ICommand DirectoryListMouseClickCommand { get; set; }
     
     [ObservableProperty]
@@ -29,9 +32,17 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel()
     {
         Hierarchy = new ApplicationDirectory(@"C:\etc\websites\ads");
-        GoDownCommand = new ApplicationCommand((p) =>
+        tabs = new ObservableCollection<BaseTab>();
+        tabs.Add(new FileManagerTab());
+        tabs.Add(new ImageFileTab(@"C:\Users\Demian\Downloads\AD2.png"));
+        tabs.Add(new TextFileTab(@"C:\Users\Demian\Downloads\Yevgeniy Vicktorovich Prigozhin3.pdf"));
+        tabs.Add(new ByteFileTab(@"C:\Users\Demian\Downloads\Yevgeniy Vicktorovich Prigozhin3.pdf"));
+        tabs[1].GenerateContent();
+        tabs[2].GenerateContent();
+        tabs[3].GenerateContent();
+        SelectFolderItemCommand = new ApplicationCommand((p) =>
         {
-            // GoDownHierarchy(p);
+            SelectFolderItem(p);
         });
         DirectoryListMouseClickCommand = new ActionCommand((p) =>
         {
@@ -41,18 +52,18 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void GoUpHierarchy()
+    private void GoUpLeftHierarchy()
     {
         Hierarchy.GoUp();
     }
     
-    private void GoDownHierarchy(object parameter)
+    private void SelectFolderItem(object parameter)
     {
         SelectionChangedEventArgs p = parameter as SelectionChangedEventArgs;
         if (p.AddedItems.Count == 0) return;
         var addedItem = p.AddedItems[0] as ApplicationDirectory;
-        // Hierarchy.GoDown(addedItem as ApplicationDirectory);
         LeftHierarchySelectedItem = addedItem;
+        Debug.Write(LeftHierarchySelectedItem.Info.Name);
     }
     
     private void DirectoryListMouseClick(object parameter)
@@ -71,4 +82,5 @@ public partial class MainViewModel : ObservableObject
             Hierarchy.GoDown(LeftHierarchySelectedItem);
         }
     }
+
 }

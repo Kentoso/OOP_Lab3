@@ -10,11 +10,11 @@ namespace FileManagerLab.Model;
 public partial class ApplicationDirectory : ObservableObject
 {
     [ObservableProperty] 
-    public DirectoryInfo info;
+    private DirectoryInfo info;
     [ObservableProperty]
-    public List<ApplicationFile> fileInfo;
+    private List<ApplicationFile> fileInfo;
     [ObservableProperty]
-    public List<ApplicationDirectory> children;
+    private List<ApplicationDirectory> children;
     
     public ApplicationDirectory(string path)
     {
