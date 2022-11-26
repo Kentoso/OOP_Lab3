@@ -17,21 +17,32 @@ namespace FileManagerLab.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty] public ApplicationDirectory hierarchy;
+    [ObservableProperty] public ApplicationDirectory leftHierarchy;
+    [ObservableProperty] public ApplicationDirectory rightHierarchy;
 
     [ObservableProperty]
     public ApplicationDirectory leftHierarchySelectedItem;
+    [ObservableProperty]
+    public ApplicationDirectory rightHierarchySelectedItem;
     
     [ObservableProperty]
     public BaseTab currentTab;
-    public ICommand SelectFolderItemCommand { get; set; } 
-    public ICommand DirectoryListMouseClickCommand { get; set; }
+    public ICommand LeftHierarchySelectItemCommand { get; set; } 
+    public ICommand LeftHierarchyMouseClickCommand { get; set; }
+    public ICommand LeftHierarchyCreateFolderCommand { get; set; }
+    public ICommand LeftHierarchyDeleteFolderCommand { get; set; }
+
+    public ICommand RightHierarchySelectItemCommand { get; set; }
+    public ICommand RightHierarchyMouseClickCommand { get; set; }
+    public ICommand RightHierarchyCreateFolderCommand { get; set; }
+
     
     [ObservableProperty]
     public ObservableCollection<BaseTab> tabs;
     public MainViewModel()
     {
-        Hierarchy = new ApplicationDirectory(@"C:\etc\websites\ads");
+        leftHierarchy = new ApplicationDirectory(@"C:\etc\websites\ads");
+        rightHierarchy = new ApplicationDirectory(@"");
         tabs = new ObservableCollection<BaseTab>();
         tabs.Add(new FileManagerTab());
         tabs.Add(new ImageFileTab(@"C:\Users\Demian\Downloads\AD2.png"));
@@ -40,33 +51,65 @@ public partial class MainViewModel : ObservableObject
         tabs[1].GenerateContent();
         tabs[2].GenerateContent();
         tabs[3].GenerateContent();
-        SelectFolderItemCommand = new ApplicationCommand((p) =>
+        LeftHierarchySelectItemCommand = new ApplicationCommand((p) =>
         {
-            SelectFolderItem(p);
+            HierarchySelectItem(p, ref leftHierarchySelectedItem);
         });
-        DirectoryListMouseClickCommand = new ActionCommand((p) =>
+        LeftHierarchyMouseClickCommand = new ActionCommand((p) =>
         {
-            DirectoryListMouseClick(p);
+            HierarchyMouseClick(p, LeftHierarchy, LeftHierarchySelectedItem);
         });
-        // var a = DriveInfo.GetDrives();
+        LeftHierarchyCreateFolderCommand = new ActionCommand(() =>
+        {
+            HierarchyCreateFolder(LeftHierarchy);
+        });
+        LeftHierarchyDeleteFolderCommand = new ActionCommand(() =>
+        {
+            Directory.Delete(LeftHierarchySelectedItem.Info.FullName);
+        });
+        
+        RightHierarchySelectItemCommand = new ApplicationCommand((p) =>
+        {
+            HierarchySelectItem(p, ref rightHierarchySelectedItem);
+        });
+        RightHierarchyMouseClickCommand = new ActionCommand((p) =>
+        {
+            HierarchyMouseClick(p, RightHierarchy, RightHierarchySelectedItem);
+        });
+        RightHierarchyCreateFolderCommand = new ActionCommand(() =>
+        {
+            HierarchyCreateFolder(RightHierarchy);
+        });
     }
 
     [RelayCommand]
     private void GoUpLeftHierarchy()
     {
-        Hierarchy.GoUp();
+        LeftHierarchy.GoUp();
+    }
+
+    [RelayCommand]
+    private void GoUpRightHierarchy()
+    {
+        RightHierarchy.GoUp();
     }
     
-    private void SelectFolderItem(object parameter)
+    private void HierarchyCreateFolder(ApplicationDirectory hierarchy)
+    {
+        if (hierarchy.Info.FullName.Trim().Length == 0 || hierarchy.Info.Parent == null) return;
+        Directory.CreateDirectory(@$"{hierarchy.Info.FullName}\New folder");
+        hierarchy.UpdateInfo();
+    }
+    private void HierarchySelectItem(object parameter, ref ApplicationDirectory selectedItem)
     {
         SelectionChangedEventArgs p = parameter as SelectionChangedEventArgs;
         if (p.AddedItems.Count == 0) return;
         var addedItem = p.AddedItems[0] as ApplicationDirectory;
-        LeftHierarchySelectedItem = addedItem;
-        Debug.Write(LeftHierarchySelectedItem.Info.Name);
+        selectedItem = addedItem;
+        Debug.Write(selectedItem.Info.Name);
     }
-    
-    private void DirectoryListMouseClick(object parameter)
+
+    private void HierarchyMouseClick(object parameter, ApplicationDirectory hierarchy, ApplicationDirectory selectedItem)
     {
         var p = parameter as MouseButtonEventArgs;
         if (p == null) return;
@@ -79,8 +122,7 @@ public partial class MainViewModel : ObservableObject
         }
         else if (p.ChangedButton == MouseButton.Left)
         {
-            Hierarchy.GoDown(LeftHierarchySelectedItem);
+            hierarchy.GoDown(selectedItem);
         }
     }
-
 }

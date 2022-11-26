@@ -18,8 +18,16 @@ public partial class ApplicationDirectory : ObservableObject
     
     public ApplicationDirectory(string path)
     {
-        Info = new DirectoryInfo(path);
-        UpdateInfo();
+        if (path.Trim().Length == 0)
+        {
+            Children = DriveInfo.GetDrives().Select(d => new ApplicationDirectory(d.RootDirectory)).ToList();
+            FileInfo = null;
+        }
+        else
+        {
+            Info = new DirectoryInfo(path);
+            UpdateInfo();
+        }
     }
 
     public ApplicationDirectory(DirectoryInfo info)
@@ -35,6 +43,7 @@ public partial class ApplicationDirectory : ObservableObject
         }
         else
         {
+            Info = null;
             Children = DriveInfo.GetDrives().Select(d => new ApplicationDirectory(d.RootDirectory)).ToList();
             FileInfo = null;
         }
@@ -46,7 +55,7 @@ public partial class ApplicationDirectory : ObservableObject
         UpdateInfo();
     }
 
-    private void UpdateInfo()
+    public void UpdateInfo()
     {
         Children = Info.GetDirectories().Where(d => Directory.Exists(d.FullName) && !d.Attributes.HasFlag(FileAttributes.Hidden)).Select(d => new ApplicationDirectory(d)).ToList();
         var files = Info.GetFiles();

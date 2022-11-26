@@ -57,6 +57,26 @@ public partial class FileManager : UserControl
         get => (ICommand) GetValue(HierarchySelectItemCommandProperty);
         set => SetValue(HierarchySelectItemCommandProperty, value);
     }
+
+    public static readonly DependencyProperty CreateFolderCommandProperty = DependencyProperty.Register(
+        "CreateFolderCommand", typeof(ICommand),
+        typeof(FileManager)
+    );
+    public ICommand CreateFolderCommand
+    {
+        get => (ICommand) GetValue(CreateFolderCommandProperty);
+        set => SetValue(CreateFolderCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty DeleteFolderCommandProperty = DependencyProperty.Register(
+        "DeleteFolderCommand", typeof(ICommand),
+        typeof(FileManager)
+    );
+    public ICommand DeleteFolderCommand
+    {
+        get => (ICommand) GetValue(DeleteFolderCommandProperty);
+        set => SetValue(DeleteFolderCommandProperty, value);
+    }
     public FileManager()
     {
         InitializeComponent();

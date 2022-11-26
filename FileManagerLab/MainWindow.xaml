@@ -59,19 +59,22 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <v:FileManager
+                        CreateFolderCommand="{Binding LeftHierarchyCreateFolderCommand}"
+                        DeleteFolderCommand="{Binding LeftHierarchyDeleteFolderCommand}"
                         GoUpHierarchyCommand="{Binding GoUpLeftHierarchyCommand}"
-                        Hierarchy="{Binding Hierarchy}"
-                        HierarchyMouseClickCommand="{Binding DirectoryListMouseClickCommand}"
-                        HierarchySelectItemCommand="{Binding SelectFolderItemCommand}"
+                        Hierarchy="{Binding LeftHierarchy}"
+                        HierarchyMouseClickCommand="{Binding LeftHierarchyMouseClickCommand}"
+                        HierarchySelectItemCommand="{Binding LeftHierarchySelectItemCommand}"
                         SelectedItem="{Binding LeftHierarchySelectedItem}" />
-                    <Grid Background="Gray" Grid.Column="1" />
+                    <Grid Background="LightGray" Grid.Column="1" />
                     <v:FileManager
-                        GoUpHierarchyCommand="{Binding GoUpLeftHierarchyCommand}"
+                        CreateFolderCommand="{Binding RightHierarchyCreateFolderCommand}"
+                        GoUpHierarchyCommand="{Binding GoUpRightHierarchyCommand}"
                         Grid.Column="2"
-                        Hierarchy="{Binding Hierarchy}"
-                        HierarchyMouseClickCommand="{Binding DirectoryListMouseClickCommand}"
-                        HierarchySelectItemCommand="{Binding SelectFolderItemCommand}"
-                        SelectedItem="{Binding LeftHierarchySelectedItem}" />
+                        Hierarchy="{Binding RightHierarchy}"
+                        HierarchyMouseClickCommand="{Binding RightHierarchyMouseClickCommand}"
+                        HierarchySelectItemCommand="{Binding RightHierarchySelectItemCommand}"
+                        SelectedItem="{Binding RightHierarchySelectedItem}" />
 
                 </Grid>
             </DockPanel>
