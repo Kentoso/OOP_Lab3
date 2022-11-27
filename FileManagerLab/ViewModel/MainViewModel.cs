@@ -19,6 +19,9 @@ namespace FileManagerLab.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
+    [ObservableProperty] public FileManagerState left;
+    [ObservableProperty] public FileManagerState right;
+    
     [ObservableProperty] public ApplicationDirectory leftHierarchy;
     [ObservableProperty] public ApplicationDirectory rightHierarchy;
 
