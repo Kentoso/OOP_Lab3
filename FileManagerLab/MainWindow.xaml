@@ -65,6 +65,8 @@
                         Hierarchy="{Binding LeftHierarchy}"
                         HierarchyMouseClickCommand="{Binding LeftHierarchyMouseClickCommand}"
                         HierarchySelectItemCommand="{Binding LeftHierarchySelectItemCommand}"
+                        MoveFolderCommand="{Binding LeftHierarchyMoveFolderCommand}"
+                        RenameFolderCommand="{Binding LeftHierarchyRenameFolderCommand}"
                         SelectedItem="{Binding LeftHierarchySelectedItem}" />
                     <Grid Background="LightGray" Grid.Column="1" />
                     <v:FileManager
@@ -74,6 +76,8 @@
                         Hierarchy="{Binding RightHierarchy}"
                         HierarchyMouseClickCommand="{Binding RightHierarchyMouseClickCommand}"
                         HierarchySelectItemCommand="{Binding RightHierarchySelectItemCommand}"
+                        MoveFolderCommand="{Binding RightHierarchyMoveFolderCommand}"
+                        RenameFolderCommand="{Binding RightHierarchyRenameFolderCommand}"
                         SelectedItem="{Binding RightHierarchySelectedItem}" />
 
                 </Grid>

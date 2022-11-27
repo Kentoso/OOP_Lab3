@@ -20,6 +20,7 @@ public partial class ApplicationDirectory : ObservableObject
     {
         if (path.Trim().Length == 0)
         {
+            Info = null;
             Children = DriveInfo.GetDrives().Select(d => new ApplicationDirectory(d.RootDirectory)).ToList();
             FileInfo = null;
         }
@@ -36,7 +37,7 @@ public partial class ApplicationDirectory : ObservableObject
     }
     public void GoUp()
     {
-        if (Info.Parent != null)
+        if (Info != null && Info.Parent != null)
         {
             Info = Info.Parent;
             UpdateInfo();
