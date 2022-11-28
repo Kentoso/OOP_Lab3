@@ -55,164 +55,14 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="50" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <v:FileManager
-                        CreateFolderCommand="{Binding LeftHierarchyCreateFolderCommand}"
-                        DeleteFolderCommand="{Binding LeftHierarchyDeleteFolderCommand}"
-                        GoUpHierarchyCommand="{Binding GoUpLeftHierarchyCommand}"
-                        Hierarchy="{Binding LeftHierarchy}"
-                        HierarchyMouseClickCommand="{Binding LeftHierarchyMouseClickCommand}"
-                        HierarchySelectItemCommand="{Binding LeftHierarchySelectItemCommand}"
-                        MoveFolderCommand="{Binding LeftHierarchyMoveFolderCommand}"
-                        RenameFolderCommand="{Binding LeftHierarchyRenameFolderCommand}"
-                        SelectedItem="{Binding LeftHierarchySelectedItem}" />
+                    <v:FileManagerWrapper State="{Binding Left}" />
                     <Grid Background="LightGray" Grid.Column="1" />
-                    <v:FileManager
-                        CreateFolderCommand="{Binding RightHierarchyCreateFolderCommand}"
-                        GoUpHierarchyCommand="{Binding GoUpRightHierarchyCommand}"
-                        Grid.Column="2"
-                        Hierarchy="{Binding RightHierarchy}"
-                        HierarchyMouseClickCommand="{Binding RightHierarchyMouseClickCommand}"
-                        HierarchySelectItemCommand="{Binding RightHierarchySelectItemCommand}"
-                        MoveFolderCommand="{Binding RightHierarchyMoveFolderCommand}"
-                        RenameFolderCommand="{Binding RightHierarchyRenameFolderCommand}"
-                        SelectedItem="{Binding RightHierarchySelectedItem}" />
-
+                    <v:FileManagerWrapper Grid.Column="2" State="{Binding Right}" />
                 </Grid>
             </DockPanel>
-            <!-- <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext}"> -->
-            <!--     <Grid.ColumnDefinitions> -->
-            <!--         <ColumnDefinition Width="*" /> -->
-            <!--         <ColumnDefinition Width="*" /> -->
-            <!--     </Grid.ColumnDefinitions> -->
-            <!--     <Grid> -->
-            <!--         <Grid.ColumnDefinitions> -->
-            <!--             <ColumnDefinition Width="*" /> -->
-            <!--             <ColumnDefinition Width="Auto" /> -->
-            <!--             <ColumnDefinition Width="2*" /> -->
-            <!--         </Grid.ColumnDefinitions> -->
-            <!--         <Grid> -->
-            <!--             <Grid.RowDefinitions> -->
-            <!--                 <RowDefinition Height="Auto" /> -->
-            <!--                 <RowDefinition Height="Auto" /> -->
-            <!--                 <RowDefinition Height="*" /> -->
-            <!--             </Grid.RowDefinitions> -->
-            <!--             <Label Content="{Binding Hierarchy.Info.FullName}" Grid.Row="0" /> -->
-            <!--             <Grid Grid.Row="1"> -->
-            <!--                 <Grid.ColumnDefinitions> -->
-            <!--                     <ColumnDefinition Width="*" /> -->
-            <!--                     <ColumnDefinition Width="*" /> -->
-            <!--                 </Grid.ColumnDefinitions> -->
-            <!--                 <Button Content="&lt;" /> -->
-            <!--  <Button  -->
-            <!--  Command="{Binding GoUpHierarchyCommand}"  -->
-            <!--  Content="^"  -->
-            <!--  Grid.Column="1" />  -->
-            <!--             </Grid> -->
-            <!--  <ScrollViewer  -->
-            <!--  Background="White"  -->
-            <!--  Grid.Row="2"  -->
-            <!--  HorizontalScrollBarVisibility="Auto"  -->
-            <!--  VerticalScrollBarVisibility="Auto">  -->
-            <!--                 <ScrollViewer.ContextMenu> -->
-            <!--                     <ContextMenu> -->
-            <!--                         <MenuItem Header="Hi" /> -->
-            <!--                     </ContextMenu> -->
-            <!--                 </ScrollViewer.ContextMenu> -->
-            <!--                 <StackPanel> -->
-            <!--  <ListView  -->
-            <!--  ItemsSource="{Binding Hierarchy.Children}"  -->
-            <!--  Margin="0,0,0,50"  -->
-            <!--  SelectedItem="{Binding LeftHierarchySelectedItem}"  -->
-            <!--  SelectionMode="Single">  -->
-            <!--                         <ListView.Resources> -->
-            <!--                             <BitmapImage UriSource="Icons/folder.png" x:Key="FolderIcon" /> -->
-            <!--                         </ListView.Resources> -->
-            <!--                         <ListView.ContextMenu> -->
-            <!--                             <ContextMenu> -->
-            <!--                                 <MenuItem Header="Copy" /> -->
-            <!--                                 <MenuItem Header="Duplicate" /> -->
-            <!--                                 <MenuItem Header="Move" /> -->
-            <!--                                 <MenuItem Header="Delete" /> -->
-            <!--                             </ContextMenu> -->
-            <!--                         </ListView.ContextMenu> -->
-            <!--                         <ListView.Template> -->
-            <!--                             <ControlTemplate> -->
-            <!--                                 <ItemsPresenter /> -->
-            <!--                             </ControlTemplate> -->
-            <!--                         </ListView.Template> -->
-            <!--                         <i:Interaction.Triggers> -->
-            <!--                             <i:EventTrigger EventName="MouseUp"> -->
-            <!--                                 <i:InvokeCommandAction Command="{Binding DirectoryListMouseClickCommand}" PassEventArgsToCommand="True" /> -->
-            <!--                             </i:EventTrigger> -->
-            <!--                             <i:EventTrigger EventName="SelectionChanged"> -->
-            <!--                                 <i:InvokeCommandAction Command="{Binding SelectFolderItemCommand}" PassEventArgsToCommand="True" /> -->
-            <!--                             </i:EventTrigger> -->
-            <!--                         </i:Interaction.Triggers> -->
-            <!--                         <ListView.ItemTemplate> -->
-            <!--                             <DataTemplate DataType="m:ApplicationDirectory"> -->
-            <!--                                 <StackPanel Orientation="Horizontal"> -->
-            <!--                                     ~1~ <i:Interaction.Triggers> @1@ -->
-            <!--                                     ~1~     <i:EventTrigger EventName="PreviewMouseDown"> @1@ -->
-            <!--                                     ~1~         <i:InvokeCommandAction Command="{Binding DirectoryListRightClickCommand}" PassEventArgsToCommand="True" /> @1@ -->
-            <!--                                     ~1~     </i:EventTrigger> @1@ -->
-            <!--                                     ~1~ </i:Interaction.Triggers> @1@ -->
-            <!--                                     <Image MaxWidth="16" Source="{StaticResource FolderIcon}" /> -->
-            <!--                                     <Label Content="{Binding Info.Name}" FontSize="10" /> -->
-            <!--                                 </StackPanel> -->
-            <!--                             </DataTemplate> -->
-            <!--                         </ListView.ItemTemplate> -->
-            <!--                     </ListView> -->
-            <!--                 </StackPanel> -->
-            <!--             </ScrollViewer> -->
-            <!--         </Grid> -->
-            <!--         <StackPanel Grid.Column="1" Orientation="Horizontal"> -->
-            <!--             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" /> -->
-            <!--         </StackPanel> -->
-            <!--         <ScrollViewer Background="White" Grid.Column="2"> -->
-            <!--             <ScrollViewer.ContextMenu> -->
-            <!--                 <ContextMenu> -->
-            <!--                     <MenuItem Header="Hi" /> -->
-            <!--                 </ContextMenu> -->
-            <!--             </ScrollViewer.ContextMenu> -->
-            <!--             <StackPanel> -->
-            <!--                 <ListView ItemsSource="{Binding Hierarchy.FileInfo}" Margin="0,0,0,50"> -->
-            <!--                     <ListView.ContextMenu> -->
-            <!--                         <ContextMenu> -->
-            <!--                             <MenuItem Header="Copy" /> -->
-            <!--                             <MenuItem Header="Duplicate" /> -->
-            <!--                             <MenuItem Header="Move" /> -->
-            <!--                             <MenuItem Header="Delete" /> -->
-            <!--                         </ContextMenu> -->
-            <!--                     </ListView.ContextMenu> -->
-            <!--                     <ListView.Template> -->
-            <!--                         <ControlTemplate> -->
-            <!--                             <ItemsPresenter /> -->
-            <!--                         </ControlTemplate> -->
-            <!--                     </ListView.Template> -->
-            <!--                     <ListView.ItemTemplate> -->
-            <!--                         <DataTemplate DataType="m:ApplicationFile"> -->
-            <!--                             <StackPanel Orientation="Horizontal"> -->
-            <!--                                 <Image MaxWidth="32" Source="{Binding FileIcon}" /> -->
-            <!--                                 <Label Content="{Binding FileInfo.Name}" /> -->
-            <!--                             </StackPanel> -->
-            <!--                         </DataTemplate> -->
-            <!--                     </ListView.ItemTemplate> -->
-            <!--                 </ListView> -->
-            <!--             </StackPanel> -->
-            <!--         </ScrollViewer> -->
-            <!--     </Grid> -->
-            <!--     <Grid Grid.Column="1"> -->
-            <!--         <Grid.ColumnDefinitions> -->
-            <!--             <ColumnDefinition Width="*" /> -->
-            <!--             <ColumnDefinition Width="2*" /> -->
-            <!--         </Grid.ColumnDefinitions> -->
-            <!--         <TreeView /> -->
-            <!--         <ListView Grid.Column="1" /> -->
-            <!--     </Grid> -->
-            <!-- </Grid> -->
         </DataTemplate>
         <DataTemplate DataType="{x:Type t:ImageFileTab}">
             <Grid>
@@ -234,7 +84,13 @@
                 <DataTemplate DataType="t:BaseTab">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="{Binding TabName}" />
-                        <Button Background="Transparent" BorderBrush="Transparent">✕</Button>
+                        <Button
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.CloseTabCommand}"
+                            CommandParameter="{Binding Path=.}">
+                            ✕
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

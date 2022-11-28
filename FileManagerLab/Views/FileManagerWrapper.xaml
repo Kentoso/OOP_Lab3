@@ -1,0 +1,34 @@
+﻿<UserControl
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d"
+    x:Class="FileManagerLab.Views.FileManagerWrapper"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FileManagerLab.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <local:FileManager
+            ClonePathCommand="{Binding ClonePathCommand}"
+            CopyFileCommand="{Binding CopyFileCommand}"
+            CreateFileCommand="{Binding CreateFileCommand}"
+            CreateFolderCommand="{Binding CreateFolderCommand}"
+            DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FileManagerWrapper}}, Path=State}"
+            DeleteFileCommand="{Binding DeleteFileCommand}"
+            DeleteFolderCommand="{Binding DeleteFolderCommand}"
+            DuplicateFileCommand="{Binding DuplicateFileCommand}"
+            FileMouseClickCommand="{Binding FileMouseClickCommand}"
+            GoUpHierarchyCommand="{Binding GoUpHierarchyCommand}"
+            Hierarchy="{Binding CurrentHierarchy}"
+            HierarchyMouseClickCommand="{Binding MouseClickCommand}"
+            HierarchySelectItemCommand="{Binding SelectItemCommand}"
+            MoveFileCommand="{Binding MoveFileCommand}"
+            MoveFolderCommand="{Binding MoveFolderCommand}"
+            OpenTerminalCommand="{Binding OpenTerminalCommand}"
+            RefreshCommand="{Binding RefreshCommand}"
+            RenameFileCommand="{Binding RenameFileCommand}"
+            RenameFolderCommand="{Binding RenameFolderCommand}"
+            SelectFileCommand="{Binding SelectFileCommand}" />
+    </Grid>
+</UserControl>

@@ -192,6 +192,42 @@ public partial class FileManager : UserControl
         set => SetValue(SelectFileCommandProperty, value);
     }
     #endregion
+
+    #region other
+
+    public static readonly DependencyProperty OpenTerminalCommandProperty = DependencyProperty.Register(
+        "OpenTerminalCommand", typeof(ICommand),
+        typeof(FileManager)
+    );
+
+    public ICommand OpenTerminalCommand
+    {
+        get => (ICommand) GetValue(OpenTerminalCommandProperty);
+        set => SetValue(OpenTerminalCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty ClonePathCommandProperty = DependencyProperty.Register(
+        "ClonePathCommand", typeof(ICommand),
+        typeof(FileManager)
+    );
+
+    public ICommand ClonePathCommand
+    {
+        get => (ICommand) GetValue(ClonePathCommandProperty);
+        set => SetValue(ClonePathCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty RefreshCommandProperty = DependencyProperty.Register(
+        "RefreshCommand", typeof(ICommand),
+        typeof(FileManager)
+    );
+
+    public ICommand RefreshCommand
+    {
+        get => (ICommand) GetValue(RefreshCommandProperty);
+        set => SetValue(RefreshCommandProperty, value);
+    }
+    #endregion
     
     public FileManager()
     {

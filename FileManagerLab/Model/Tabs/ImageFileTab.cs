@@ -1,4 +1,6 @@
-﻿namespace FileManagerLab.Model.Tabs;
+﻿using System.IO;
+
+namespace FileManagerLab.Model.Tabs;
 
 public class ImageFileTab : BaseTab
 {
@@ -8,7 +10,7 @@ public class ImageFileTab : BaseTab
     }
     public override void GenerateContent()
     {
-        TabName = _path;
+        TabName = Path.GetFileName(_path);
         Content = _path;
     }
 }

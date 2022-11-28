@@ -21,164 +21,110 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] public FileManagerState left;
     [ObservableProperty] public FileManagerState right;
-    
-    [ObservableProperty] public ApplicationDirectory leftHierarchy;
-    [ObservableProperty] public ApplicationDirectory rightHierarchy;
-
-    [ObservableProperty] public ApplicationDirectory leftHierarchySelectedItem;
-    [ObservableProperty] public ApplicationDirectory rightHierarchySelectedItem;
-
-    [ObservableProperty] public ApplicationDirectory leftHierarchySelectedFile;
-    [ObservableProperty] public ApplicationDirectory rightHierarchySelectedFile;
 
     [ObservableProperty] public BaseTab currentTab;
 
     [ObservableProperty] public string newFolderName;
-    public ICommand LeftHierarchySelectItemCommand { get; set; }
-    public ICommand LeftHierarchySelectFileCommand { get; set; }
-    public ICommand LeftHierarchyMouseClickCommand { get; set; }
-    public ICommand LeftHierarchyFileMouseClickCommand { get; set; }
-    public ICommand LeftHierarchyCreateFolderCommand { get; set; }
-    public ICommand LeftHierarchyDeleteFolderCommand { get; set; }
+    [ObservableProperty] public string newFileName;
     public ICommand LeftHierarchyRenameFolderCommand { get; set; }
-    public ICommand LeftHierarchyMoveFolderCommand { get; set; }
-    public ICommand LeftHierarchyMoveFileCommand { get; set; }
-    public ICommand LeftHierarchyDuplicateFileCommand { get; set; }
-    public ICommand LeftHierarchyDeleteFileCommand { get; set; }
-    public ICommand LeftHierarchyCopyFileCommand { get; set; }
-    public ICommand LeftHierarchyRenameFileCommand { get; set; }
-    
-    public ICommand RightHierarchySelectItemCommand { get; set; }
-    public ICommand RightHierarchySelectFileCommand { get; set; }
-    public ICommand RightHierarchyMouseClickCommand { get; set; }
-    public ICommand RightHierarchyFileMouseClickCommand { get; set; }
-    public ICommand RightHierarchyCreateFolderCommand { get; set; }
-    public ICommand RightHierarchyDeleteFolderCommand { get; set; }
     public ICommand RightHierarchyRenameFolderCommand { get; set; }
-    public ICommand RightHierarchyMoveFolderCommand { get; set; }
-    public ICommand RightHierarchyMoveFileCommand { get; set; }
-    public ICommand RightHierarchyDuplicateFileCommand { get; set; }
-    public ICommand RightHierarchyDeleteFileCommand { get; set; }
-    public ICommand RightHierarchyCopyFileCommand { get; set; }
+    public ICommand LeftHierarchyRenameFileCommand { get; set; }
     public ICommand RightHierarchyRenameFileCommand { get; set; }
+    public ICommand LeftHierarchyOpenFileCommand { get; set; }
+    public ICommand RightHierarchyOpenFileCommand { get; set; }
+    
+    public ICommand CloseTabCommand { get; set; }
 
     private bool _isRenameFolderWindowOpen = false;
-    private ApplicationDirectory _renameFolderHierarchy;
-    private ApplicationDirectory _renameFolderSelectedItem;
+    private bool _isRenameFileWindowOpen = false;
+    private FileManagerState _renameFolderState;
+    private FileManagerState _renameFileState;
+    
     [ObservableProperty] public ObservableCollection<BaseTab> tabs;
 
     public MainViewModel()
     {
-        leftHierarchy = new ApplicationDirectory(@"C:\etc\websites\ads");
-        rightHierarchy = new ApplicationDirectory(@"");
+        Left = new FileManagerState(@"C:\etc\websites\ads");
+        Right = new FileManagerState("");
+        Left.Other = right;
+        Right.Other = left;
         tabs = new ObservableCollection<BaseTab>();
         tabs.Add(new FileManagerTab());
-        tabs.Add(new ImageFileTab(@"C:\Users\Demian\Downloads\AD2.png"));
-        tabs.Add(new TextFileTab(@"C:\Users\Demian\Downloads\Yevgeniy Vicktorovich Prigozhin3.pdf"));
-        tabs.Add(new ByteFileTab(@"C:\Users\Demian\Downloads\Yevgeniy Vicktorovich Prigozhin3.pdf"));
-        tabs[1].GenerateContent();
-        tabs[2].GenerateContent();
-        tabs[3].GenerateContent();
-
         #region left
-        
-        LeftHierarchySelectItemCommand = new ApplicationCommand((p) =>
-        {
-            HierarchySelectItem(p, ref leftHierarchySelectedItem);
-        });
-        LeftHierarchyMouseClickCommand = new ActionCommand((p) =>
-        {
-            HierarchyMouseClick(p, LeftHierarchy, LeftHierarchySelectedItem);
-        });
-        LeftHierarchyCreateFolderCommand = new ActionCommand(() => { HierarchyCreateFolder(LeftHierarchy); });
-        LeftHierarchyDeleteFolderCommand = new ActionCommand(() =>
-        {
-            HierarchyDeleteFolder(LeftHierarchy, LeftHierarchySelectedItem);
-        });
         LeftHierarchyRenameFolderCommand = new ActionCommand(() =>
         {
-            HierarchyRenameFolderShowWindow(LeftHierarchy, LeftHierarchySelectedItem);
+            HierarchyRenameFolderShowWindow(Left);
         });
-        LeftHierarchyMoveFolderCommand = new ActionCommand(() =>
+        LeftHierarchyRenameFileCommand = new ActionCommand(() =>
         {
-            if (RightHierarchy.Info != null)
+            HierarchyRenameFileShowWindow(Left);
+        });
+        LeftHierarchyOpenFileCommand = new ActionCommand((p) =>
+        {
+            var param = p as MouseButtonEventArgs;
+            if (param.ChangedButton == MouseButton.Left)
             {
-                try
-                {
-                    Directory.Move(LeftHierarchySelectedItem.Info.FullName,
-                        $@"{RightHierarchy.Info.FullName}\{LeftHierarchySelectedItem.Info.Name}");
-                    LeftHierarchy.UpdateInfo();
-                    RightHierarchy.UpdateInfo();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show($"There was an exception while moving the file: {e.Message}", "Exception",
-                        MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
-                }
+                OpenNewFileTab(Left);
             }
         });
-
         #endregion
+
+        Left.RenameFolderCommand = LeftHierarchyRenameFolderCommand;
+        Left.RenameFileCommand = LeftHierarchyRenameFileCommand;
+        Left.FileMouseClickCommand = LeftHierarchyOpenFileCommand;
 
         #region right
-        RightHierarchySelectItemCommand = new ApplicationCommand((p) =>
-        {
-            HierarchySelectItem(p, ref rightHierarchySelectedItem);
-        });
-        RightHierarchyMouseClickCommand = new ActionCommand((p) =>
-        {
-            HierarchyMouseClick(p, RightHierarchy, RightHierarchySelectedItem);
-        });
-        RightHierarchyCreateFolderCommand = new ActionCommand(() => { HierarchyCreateFolder(RightHierarchy); });
-        RightHierarchyDeleteFolderCommand = new ActionCommand(() =>
-        {
-            HierarchyDeleteFolder(RightHierarchy, RightHierarchySelectedItem);
-        });
         RightHierarchyRenameFolderCommand = new ActionCommand(() =>
         {
-            HierarchyRenameFolderShowWindow(RightHierarchy, RightHierarchySelectedItem);
+            HierarchyRenameFolderShowWindow(Right);
         });
-        RightHierarchyMoveFolderCommand = new ActionCommand(() =>
+        RightHierarchyRenameFileCommand = new ActionCommand(() =>
         {
-            if (LeftHierarchy.Info != null)
+            HierarchyRenameFileShowWindow(Right);
+        });
+        RightHierarchyOpenFileCommand = new ActionCommand((p) =>
+        {
+            var param = p as MouseButtonEventArgs;
+            if (param.ChangedButton == MouseButton.Left)
             {
-                try
-                {
-                    Directory.Move(RightHierarchySelectedItem.Info.FullName,
-                        $@"{LeftHierarchy.Info.FullName}\{RightHierarchySelectedItem.Info.Name}");
-                    LeftHierarchy.UpdateInfo();
-                    RightHierarchy.UpdateInfo();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show($"There was an exception while moving the file: {e.Message}", "Exception",
-                        MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
-                }
+                OpenNewFileTab(Right);
             }
         });
         #endregion
-        
-    }
 
-    private void InitializeLeftHierarchyCommands()
-    {
-        
-    }
+        Right.RenameFolderCommand = RightHierarchyRenameFolderCommand;
+        Right.RenameFileCommand = RightHierarchyRenameFileCommand;
+        Right.FileMouseClickCommand = RightHierarchyOpenFileCommand;
 
-    private void InitializeRightHierarchyCommands()
-    {
-
+        CloseTabCommand = new ActionCommand((t) =>
+        {
+            var tab = t as BaseTab;
+            if (tab == null) return;
+            CloseTab(tab);
+        });
     }
-    [RelayCommand]
-    private void GoUpLeftHierarchy()
+    private void CloseTab(BaseTab tab)
     {
-        LeftHierarchy.GoUp();
+        if (tab != Tabs[0]) Tabs.Remove(tab);
     }
-
-    [RelayCommand]
-    private void GoUpRightHierarchy()
+    private void OpenNewFileTab(FileManagerState state)
     {
-        RightHierarchy.GoUp();
+        var newTab = TabFactory.Instance.CreateTabFromPath(state.SelectedFile.FullName);
+        if (newTab == null)
+        {
+            if (File.Exists(state.SelectedFile.FullName))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = state.SelectedFile.FullName,
+                    UseShellExecute = true
+                });
+                return;
+            }
+            return;
+        }
+        newTab.GenerateContent();
+        Tabs.Add(newTab);
     }
 
     [RelayCommand]
@@ -186,85 +132,79 @@ public partial class MainViewModel : ObservableObject
     {
         window.Close();
         _isRenameFolderWindowOpen = false;
-        HierarchyRenameFolder(_renameFolderHierarchy, _renameFolderSelectedItem);
+        HierarchyRenameFolder(_renameFolderState);
         NewFolderName = "";
     }
 
-    private void HierarchyCreateFolder(ApplicationDirectory hierarchy)
+    [RelayCommand]
+    private void FinishRenamingFile(Window window)
     {
-        if (hierarchy.Info.FullName.Trim().Length == 0 || hierarchy.Info.Parent == null) return;
-        var startPath = @$"{hierarchy.Info.FullName}\New folder";
-        if (!Directory.Exists(startPath))
-        {
-            Directory.CreateDirectory(startPath);
-            hierarchy.UpdateInfo();
-        }
-        else
-        {
-            int i = 1;
-            while (true)
-            {
-                string newPath = @$"{hierarchy.Info.FullName}\New folder ({i})";
-                if (Directory.Exists(newPath))
-                {
-                    i++;
-                    continue;
-                }
-
-                Directory.CreateDirectory(newPath);
-                hierarchy.UpdateInfo();
-                break;
-            }
-        }
+        window.Close();
+        _isRenameFileWindowOpen = false;
+        HierarchyRenameFile(_renameFileState);
+        NewFileName = "";
+    }
+    
+    [RelayCommand]
+    private void CloseFolderWindow()
+    {
+        _isRenameFolderWindowOpen = false;
     }
 
-    private void HierarchyDeleteFolder(ApplicationDirectory hierarchy, ApplicationDirectory selectedItem)
+    [RelayCommand]
+    private void CloseFileWindow()
     {
-        Directory.Delete(selectedItem.Info.FullName);
-        hierarchy.UpdateInfo();
+        _isRenameFileWindowOpen = false;
     }
-
-    private void HierarchyRenameFolderShowWindow(ApplicationDirectory hierarchy, ApplicationDirectory selectedItem)
+    private void HierarchyRenameFolderShowWindow(FileManagerState state)
     {
         if (_isRenameFolderWindowOpen) return;
         RenameDialog dialog = new RenameDialog();
         dialog.DataContext = this;
         dialog.Show();
-        _renameFolderHierarchy = hierarchy;
-        _renameFolderSelectedItem = selectedItem;
+        _renameFolderState = state;
         _isRenameFolderWindowOpen = true;
+        NewFolderName = state.SelectedItem.Info.Name;
     }
 
-    private void HierarchyRenameFolder(ApplicationDirectory hierarchy, ApplicationDirectory selectedItem)
+    private void HierarchyRenameFileShowWindow(FileManagerState state)
+    {
+        if (_isRenameFileWindowOpen) return;
+        RenameFileDialog dialog = new RenameFileDialog();
+        dialog.DataContext = this;
+        dialog.Show();
+        _renameFileState = state;
+        _isRenameFileWindowOpen = true;
+        NewFileName = state.SelectedFile.Name;
+    }
+    private void HierarchyRenameFolder(FileManagerState state)
     {
         try
         {
-            Directory.Move(selectedItem.Info.FullName, $@"{hierarchy.Info.FullName}\{NewFolderName}");
-            hierarchy.UpdateInfo();
+            if (NewFolderName.Trim().Length == 0) return;
+            Directory.Move(state.SelectedItem.Info.FullName, $@"{state.CurrentHierarchy.Info.FullName}\{NewFolderName}");
+            state.CurrentHierarchy.UpdateInfo();
         }
         catch (Exception e)
         {
-            Debug.WriteLine(e.Message);
+            MessageBox.Show($"There was an exception while renaming the folder: {e.Message}", "Exception",
+                MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 
-    private void HierarchySelectItem(object parameter, ref ApplicationDirectory selectedItem)
+    private void HierarchyRenameFile(FileManagerState state)
     {
-        SelectionChangedEventArgs p = parameter as SelectionChangedEventArgs;
-        if (p.AddedItems.Count == 0) return;
-        var addedItem = p.AddedItems[0] as ApplicationDirectory;
-        selectedItem = addedItem;
-        Debug.Write(selectedItem.Info.Name);
-    }
-
-    private void HierarchyMouseClick(object parameter, ApplicationDirectory hierarchy,
-        ApplicationDirectory selectedItem)
-    {
-        var p = parameter as MouseButtonEventArgs;
-        if (p == null) return;
-        if (p.ChangedButton == MouseButton.Left)
+        try
         {
-            hierarchy.GoDown(selectedItem);
+            if (NewFileName.Trim().Length == 0) return;
+            File.Move(state.SelectedFile.FullName,
+                $@"{state.CurrentHierarchy.Info.FullName}\{NewFileName}");
+            state.CurrentHierarchy.UpdateInfo();
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show($"There was an exception while moving the file: {e.Message}", "Exception",
+                MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 }

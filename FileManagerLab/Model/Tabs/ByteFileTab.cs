@@ -34,7 +34,7 @@ public partial class ByteFileTab : BaseTab
     
     public override void GenerateContent()
     {
-        TabName = _path;
+        TabName = Path.GetFileName(_path);
         Regenerate();
     }
 

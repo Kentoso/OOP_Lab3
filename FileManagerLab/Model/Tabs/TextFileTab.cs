@@ -14,7 +14,7 @@ public partial class TextFileTab : BaseTab
     }
     public override void GenerateContent()
     {
-        TabName = _path;
+        TabName = Path.GetFileName(_path); ;
         Content = File.ReadAllText(_path);
     }
 
